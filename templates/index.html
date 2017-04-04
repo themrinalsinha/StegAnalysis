@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Including Stylesheets -->
+        <link rel="stylesheet" href="/static/node_modules/bootstrap/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/static/assets/css/main.css">
+
+        <!-- Including JavaScripts -->
+        <script src="/static/node_modules/jquery/dist/jquery.min.js"></script>
+        <script src="/static/node_modules/chart.js/dist/Chart.bundle.min.js"></script>
+        <script src="/static/node_modules/chart.js/dist/Chart.min.js"></script>
+        <script src="/static/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="/static/assets/js/bootstrap-filestyle.js"></script>
+        <script src="/static/assets/js/main.js"></script>
+
+    </head>
+
+    <body>
+<!--
+        <div class="preload">
+            <img src="/static/loading.gif">
+        </div>
+-->
+        <!-- Main Container -->
+        <div class="container container_class">
+            <div class="row">
+                <!-- Top space div -->
+                <div class="col-xs-12" style="height:20px"></div>
+
+                <!-- Select Image div -->
+                <div class="col-md-12">
+
+                    <form id="upload-form" action="/upload" method="POST" enctype="multipart/form-data">
+                        <!-- Original Image selection -->
+                        <div class="col-sm-6">
+
+                            <!-- Panel Header -->
+                            <div class="panel panel-info panel_original">
+                                <div class="panel-heading">
+                                    <h5>Select Original Image</h5>
+                                </div>
+                            <!-- image-preview-filename input [CUT FROM HERE]-->
+                                <div class="input-group image-preview">
+                                    <input type="text" class="form-control image-preview-filename" disabled="disabled"> <!-- don't give a name === doesn't send on POST/GET -->
+                                    <span class="input-group-btn">
+                                    <!-- image-preview-clear button -->
+                                        <button type="button" class="btn btn-default image-preview-clear" style="display:none;">
+                                            <span class="glyphicon glyphicon-remove"></span> Clear
+                                        </button>
+                                    <!-- image-preview-input -->
+                                        <div class="btn btn-default image-preview-input">
+                                            <span class="glyphicon glyphicon-folder-open"></span>
+                                            <span class="image-preview-input-title">Browse</span>
+                                            <input type="file" id="selected_img" accept="image/*" name="image_original"/> <!-- rename it -->
+                                        </div>
+                                    </span>
+                                </div><!-- /input-group image-preview [TO HERE]-->
+                            </div>
+                        </div>
+
+                        <!-- Encrypted Image selection -->
+                        <div class="col-sm-6">
+
+                            <!-- Panel Header -->
+                            <div class="panel panel-info panel_encrypt">
+                                <div class="panel-heading">
+                                    <h5>Select Encrypted Image</h5>
+                                </div>
+                                <!-- image-preview-filename input [CUT FROM HERE]-->
+                                <div class="input-group image-preview-enc">
+                                    <input type="text" class="form-control image-preview-filename-enc" disabled="disabled"> <!-- don't give a name === doesn't send on POST/GET -->
+                                    <span class="input-group-btn">
+                                    <!-- image-preview-clear button -->
+                                        <button type="button" class="btn btn-default image-preview-clear-enc" style="display:none;">
+                                            <span class="glyphicon glyphicon-remove"></span> Clear
+                                        </button>
+                                    <!-- image-preview-input -->
+                                        <div class="btn btn-default image-preview-input-enc">
+                                            <span class="glyphicon glyphicon-folder-open"></span>
+                                            <span class="image-preview-input-title-enc">Browse</span>
+                                            <input type="file" id="selected_img" accept="image/*" name="image_encrypted"/> <!-- rename it -->
+                                        </div>
+                                    </span>
+                                </div><!-- /input-group image-preview [TO HERE]-->
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="col-sm-12">
+                            <button type="submit" id="btn_submitdata" class="btn btn-info btn_submit" style="width:100%; margin-bottom: 20px">Analyze</button>
+                        </div>
+                    </form>
+
+                </div>
+
+                <!-- Graphical Analysis part -->
+                <div class="col-md-12">
+                    <!-- Line Graph pixel plotting part -->
+                    <div class="col-sm-9">
+                        <!-- Line graph original image -->
+                        <div class="row">
+                        <div class="col-sm-12">
+                            <div class="panel panel-danger">
+                                <div class="panel-heading">Original Image - Pixel - Line Graph</div>
+                                <div class="panel-body graph_orig" style="height: 300px;">
+
+
+                                    <!-- ORIGINAL IMAGE GRAPH -->
+                                    <canvas id="myChart_orig" width="100%" height=35px></canvas>
+                                    <script>
+                                        var ctx = document.getElementById("myChart_orig");
+                                        var myLineChart = new Chart(ctx, {
+                                            type: 'line',
+                                            data: {
+                                            labels: {{ label_original }},
+                                            datasets: [
+                                                        {
+                                                            label: "Pixel intensity - Original Image",
+                                                            fill: false,
+                                                            lineTension: 0,  //0.1
+                                                            borderWidth: "1px",
+                                                            backgroundColor: "rgba(75,192,192,0.4)",
+                                                            borderColor: "rgb(26, 41, 41)",
+                                                            borderCapStyle: 'butt',
+                                                            borderDash: [],
+                                                            borderDashOffset: 0.0,
+                                                            borderJoinStyle: 'miter',
+                                                            pointBorderColor: "rgba(75,192,192,1)",
+                                                            pointBackgroundColor: "#fff",
+                                                            pointBorderWidth: 1,
+                                                            pointHoverRadius: 2, //5
+                                                            pointHoverBackgroundColor: "rgba(75,192,192,1)",
+                                                            pointHoverBorderColor: "rgba(220,220,220,1)",
+                                                            pointHoverBorderWidth: 2,
+                                                            pointRadius: 1,
+                                                            pointHitRadius: 1, //10
+                                                            data: {{ data_original }},
+                                                            spanGaps: false,
+                                                        }
+                                                    ]
+                                                }
+                                            });
+
+
+                                    </script>
+
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Line graphy Encrypted image -->
+                        <div class="col-sm-12">
+                            <div class="panel panel-danger">
+                                <div class="panel-heading">Encrypted Image - Pixel - Line Graph</div>
+                                <div class="panel-body graph_enc" style="height:300px;">
+
+
+                                    <!-- ENCRYPTED IMAGE -->
+                                    <canvas id="myChart_enc" width="100%" height=35px></canvas>
+                                    <script>
+                                        var ctx = document.getElementById("myChart_enc");
+                                        var myLineChart = new Chart(ctx, {
+                                            type: 'line',
+                                            data: {
+                                            labels: {{ label_enc }},
+                                            datasets: [
+                                                        {
+                                                            label: "Pixel Intensity - Encrypted Image",
+                                                            fill: false,
+                                                            lineTension: 0,
+                                                            borderWidth: "1px",
+                                                            backgroundColor: "rgba(192, 75, 75, 0.4)",
+                                                            borderColor: "rgb(56, 24, 24)",
+                                                            borderCapStyle: 'butt',
+                                                            borderDash: [],
+                                                            borderDashOffset: 0.0,
+                                                            borderJoinStyle: 'miter',
+                                                            pointBorderColor: "rgb(190, 78, 73)",
+                                                            pointBackgroundColor: "#fff",
+                                                            pointBorderWidth: 1,
+                                                            pointHoverRadius: 2, //5
+                                                            pointHoverBackgroundColor: "rgb(192, 75, 75)",
+                                                            pointHoverBorderColor: "rgba(220,220,220,1)",
+                                                            pointHoverBorderWidth: 2,
+                                                            pointRadius: 1,
+                                                            pointHitRadius: 1, //10
+                                                            data: {{ data_enc }},
+                                                            spanGaps: false,
+                                                        }
+                                                    ]
+                                                }
+                                            });
+
+                                    </script>
+
+
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+
+                    <!-- Bar Graph pixel count plotting part -->
+                    <div class="col-sm-3">
+                        <div class="panel panel-danger">
+                            <div class="panel-heading">Encrypted Image - Bar Graph</div>
+                            <div class="panel-body graph_bar" style="height: 660px;">
+
+
+                                <!-- BAR GRAPH ANALYSIS -->
+                                <canvas id="myChart_bar" width="100%" height="290px"></canvas>
+                                    <script>
+                                        var ctx = document.getElementById("myChart_bar");
+                                        var myChart = new Chart(ctx, {
+                                        type: 'bar',
+                                        data: {
+                                        labels: ["Total", "Same", "Diff"],
+                                        datasets: [{
+                                        label: 'Total Pixel Count',
+                                        data: [{{ total_pixel }}, {{ unmodified_pixel }}, {{ enc_total_pixel }}],
+                                        backgroundColor: [
+                                            'rgba(10, 0, 255, 0.2)',
+                                            'rgba(6, 255, 121, 0.2)',
+                                            'rgba(255, 0, 235, 0.2)',
+                                            'rgba(75, 192, 192, 0.2)',
+                                            'rgba(153, 102, 255, 0.2)',
+                                            'rgba(255, 159, 64, 0.2)'
+                                        ],
+                                        borderColor: [
+                                            'rgb(0, 49, 255)',
+                                            'rgb(0, 159, 43)',
+                                            'rgb(222, 44, 154)',
+                                            'rgba(75, 192, 192, 1)',
+                                            'rgba(153, 102, 255, 1)',
+                                            'rgba(255, 159, 64, 1)'
+                                        ],
+                                        borderWidth: 1
+                                    }]
+                                },
+                                options: {
+                                    scales: {
+                                        yAxes: [{
+                                            ticks: {
+                                                beginAtZero:true
+                                            }
+                                        }]
+                                    }
+                                }
+                            });
+                            </script>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </body>
+</html>
